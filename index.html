@@ -253,6 +253,15 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg);
 .bias-mini .bias-mini-num { font-family: var(--mono); font-size: 11px; color: var(--petrol); letter-spacing: 0.1em; margin-bottom: 0.4rem; font-weight: 500; }
 .bias-mini h5 { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; line-height: 1.25; margin-bottom: 0.4rem; }
 .bias-mini p { font-size: 13.5px; color: var(--fg-muted); line-height: 1.55; }
+/* Slide 3 — Spain creditworthiness diagram */
+.spain-diagram-wrap { margin-top: 1rem; padding: 1.5rem 1rem 1rem; background: var(--cream); border: 0.5px solid var(--line); border-radius: 2px; position: relative; }
+.spain-diagram-wrap::before { content: 'SPAIN\'S CREDITWORTHINESS ASSESSMENT SYSTEM'; position: absolute; top: -0.55rem; left: 1.5rem; font-family: var(--sans); font-size: 9.5px; letter-spacing: 0.22em; font-weight: 600; color: var(--terra); background: var(--bg); padding: 0 0.7rem; }
+.spain-diagram-wrap svg { width: 100%; height: auto; max-height: 52vh; display: block; }
+.spain-diagram-caption { font-family: var(--sans); font-style: italic; font-size: 13px; color: var(--fg-muted); text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 0.5px solid var(--line); line-height: 1.5; }
+.spain-diagram-caption strong { color: var(--fg); font-style: normal; font-weight: 600; }
+/* Slide 5 — Framework layer diagram */
+.framework-diagram-wrap { margin-top: 0.6rem; padding: 0.4rem 0; }
+.framework-diagram-wrap svg { width: 100%; height: auto; max-height: 68vh; display: block; }
 /* Slide 7 — ROI + Valuation stacked */
 .roi-stack { display: flex; flex-direction: column; gap: 1.8rem; min-height: 0; }
 .roi-top { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding: 1.6rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -407,37 +416,67 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg);
 <section class="slide">
   <div class="slide-meta"><div class="left"><span class="pillar-tag">02</span><span class="dot"></span><span>Where the bias comes from</span></div><div class="right">03 / 12</div></div>
   <div class="slide-eyebrow">Spain's credit system → structural blind spots</div>
-  <h2 class="slide-title">Spain has <em>no universal score</em>. It has four inputs — and three blind spots.</h2>
-  <p class="slide-lead">The bias is not a model flaw in isolation. It is a structural consequence of the inputs Spanish credit assessment is built on.</p>
-  <div class="compound-2col">
-    <div class="compound-col">
-      <div class="compound-col-label">The four inputs</div>
-      <div class="system-stack">
-        <div class="system-mini"><span class="mini-num">I</span><div><div class="mini-name">CIRBE — Banco de España</div><div class="mini-desc"><em style="color: var(--fg); font-style: italic;">Spain's central bank credit register.</em> Records exposures above €1,000 — loans and credit lines held, not defaults.</div></div></div>
-        <div class="system-mini"><span class="mini-num">II</span><div><div class="mini-name">ASNEF · BADEXCUG</div><div class="mini-desc"><em style="color: var(--fg); font-style: italic;">Private default registries (the Spanish equivalent of a "bad debt" list).</em> Binary flags under AEPD oversight — clean or flagged, no credit-score gradient.</div></div></div>
-        <div class="system-mini"><span class="mini-num">III</span><div><div class="mini-name">Documentation</div><div class="mini-desc"><em style="color: var(--fg); font-style: italic;">Spanish payslips, tax records, and social-security affiliation.</em> The evidentiary backbone — implicitly requires a local footprint to produce.</div></div></div>
-        <div class="system-mini"><span class="mini-num">IV</span><div><div class="mini-name">The internal model</div><div class="mini-desc"><em style="color: var(--fg); font-style: italic;">The lender's own scoring engine.</em> Combines the three inputs above with proprietary data. Where the bias is produced.</div></div></div>
-      </div>
-    </div>
-    <div class="compound-col">
-      <div class="compound-col-label right-label">The blind spots they create</div>
-      <div class="bias-stack">
-        <div class="bias-mini">
-          <div class="bias-mini-num">A · INVISIBILITY</div>
-          <h5>An empty registry is read as risk, not as absence of data.</h5>
-          <p>Applicants without CIRBE history or social-security affiliation give the model nothing to score. Foreign credit performance is invisible. The default response is rejection.</p>
-        </div>
-        <div class="bias-mini">
-          <div class="bias-mini-num">B · PROXY</div>
-          <h5>The model rebuilds national origin even when it never sees it.</h5>
-          <p>NIE issuance date, contract type, postal code, remittance pattern — together they reconstruct the protected characteristic that was excluded as an input. Bias survives the deletion.</p>
-        </div>
-        <div class="bias-mini">
-          <div class="bias-mini-num">C · INCOME SHAPE</div>
-          <h5>Entrepreneurial cash flow is misread as instability.</h5>
-          <p>Lumpy revenue from real businesses scores worse than a flat payslip at half the level. Foreign liabilities count against. Foreign assets, unverifiable, do not count in favour.</p>
-        </div>
-      </div>
+  <h2 class="slide-title" style="font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin-bottom: 0.5rem; max-width: 68rem;">Spain has <em>no universal score</em>. It has four inputs — and two outcomes.</h2>
+  <p class="slide-lead" style="margin-bottom: 0.6rem; font-size: 13.5px; max-width: 65rem;">The bias is not a model flaw in isolation — it is a structural consequence of the inputs Spanish credit assessment is built on.</p>
+  <div class="spain-diagram-wrap" style="margin-top: 0.6rem;">
+    <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#A89A82"/>
+        </marker>
+        <marker id="arrowhead-terra" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#1E5BAA"/>
+        </marker>
+      </defs>
+
+      <!-- THREE INPUT BOXES (top row) -->
+      <!-- CIRBE -->
+      <rect x="40" y="15" width="260" height="88" rx="4" fill="#FAF7EE" stroke="#1E5BAA" stroke-width="1.2"/>
+      <text x="170" y="43" text-anchor="middle" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">CIRBE</text>
+      <text x="170" y="65" text-anchor="middle" font-family="Geist, sans-serif" font-size="12" fill="#6B5F52">Central bank credit register</text>
+      <text x="170" y="82" text-anchor="middle" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52" font-style="italic">Banco de España · exposures ≥ €1,000</text>
+
+      <!-- ASNEF/BADEXCUG -->
+      <rect x="370" y="15" width="260" height="88" rx="4" fill="#FAF7EE" stroke="#5B8DD6" stroke-width="1.2"/>
+      <text x="500" y="43" text-anchor="middle" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">ASNEF · BADEXCUG</text>
+      <text x="500" y="65" text-anchor="middle" font-family="Geist, sans-serif" font-size="12" fill="#6B5F52">Private default registries</text>
+      <text x="500" y="82" text-anchor="middle" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52" font-style="italic">Binary flags · clean or flagged</text>
+
+      <!-- Documentation -->
+      <rect x="700" y="15" width="260" height="88" rx="4" fill="#FAF7EE" stroke="#B08545" stroke-width="1.2"/>
+      <text x="830" y="43" text-anchor="middle" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">Documentation</text>
+      <text x="830" y="65" text-anchor="middle" font-family="Geist, sans-serif" font-size="12" fill="#6B5F52">Spanish payslip · tax · social security</text>
+      <text x="830" y="82" text-anchor="middle" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52" font-style="italic">Evidence requires a local footprint</text>
+
+      <!-- Arrows from inputs to internal model -->
+      <line x1="170" y1="103" x2="430" y2="175" stroke="#A89A82" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="500" y1="103" x2="500" y2="175" stroke="#A89A82" stroke-width="1" marker-end="url(#arrowhead)"/>
+      <line x1="830" y1="103" x2="570" y2="175" stroke="#A89A82" stroke-width="1" marker-end="url(#arrowhead)"/>
+
+      <!-- INTERNAL MODEL (centre) -->
+      <rect x="340" y="180" width="320" height="82" rx="4" fill="#1D3A4D" stroke="#1D3A4D" stroke-width="1.2"/>
+      <text x="500" y="208" text-anchor="middle" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#FAF7EE">Neo-bank internal AI model</text>
+      <text x="500" y="230" text-anchor="middle" font-family="Geist, sans-serif" font-size="12" fill="#D4CBB8">Proprietary risk-scoring engine</text>
+      <text x="500" y="248" text-anchor="middle" font-family="Geist, sans-serif" font-size="11" fill="#9B8F80" font-style="italic">Where the bias is produced</text>
+
+      <!-- Arrows from model to outcomes -->
+      <line x1="440" y1="262" x2="260" y2="320" stroke="#1E5BAA" stroke-width="1.3" marker-end="url(#arrowhead-terra)"/>
+      <line x1="560" y1="262" x2="740" y2="320" stroke="#1E5BAA" stroke-width="1.3" marker-end="url(#arrowhead-terra)"/>
+
+      <!-- APPROVED (bottom-left) -->
+      <rect x="60" y="325" width="400" height="72" rx="4" fill="#FAF7EE" stroke="#B08545" stroke-width="1.2"/>
+      <text x="80" y="353" font-family="Geist, sans-serif" font-size="14" font-weight="600" fill="#1A1611">Approved</text>
+      <text x="80" y="373" font-family="Geist, sans-serif" font-size="12" fill="#6B5F52">Spanish-resident salaried profile</text>
+      <text x="80" y="389" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52" font-style="italic">Complete registries, stable nómina, local footprint</text>
+
+      <!-- REJECTED (bottom-right) -->
+      <rect x="540" y="325" width="400" height="72" rx="4" fill="#FAF7EE" stroke="#1E5BAA" stroke-width="1.5"/>
+      <text x="560" y="353" font-family="Geist, sans-serif" font-size="14" font-weight="600" fill="#1E5BAA">Rejected · penalised</text>
+      <text x="560" y="373" font-family="Geist, sans-serif" font-size="12" fill="#1A1611">Emerging-market entrepreneur profile</text>
+      <text x="560" y="389" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52" font-style="italic">Zero CIRBE · Zero ASNEF · Zero social security — read as risk</text>
+    </svg>
+    <div class="spain-diagram-caption">
+      The same four inputs produce <strong>two different outcomes</strong> for two different profiles. The bias isn't intentional — it's structural.
     </div>
   </div>
 </section>
@@ -463,45 +502,123 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg);
 <section class="slide">
   <div class="slide-meta"><div class="left"><span class="pillar-tag">04</span><span class="dot"></span><span>The framework</span></div><div class="right">05 / 12</div></div>
   <div class="slide-eyebrow">The intervention, end to end</div>
-  <h2 class="slide-title">Four integrated layers. <em>Every decision explained.</em></h2>
-  <p class="slide-lead">Not a single model — a compliance architecture. A gradient-boosted classifier at the core, wrapped in explainability, constrained by fairness, and governed by humans. Each layer addresses a specific friction.</p>
-  <div class="framework-diagram">
-    <div class="framework-layer">
-      <div class="layer-num">I</div>
-      <div>
-        <div class="layer-name">Data enrichment</div>
-        <div class="layer-desc">PSD2 open banking — cash flow, invoice discipline, remittance stability, utility payments, behavioural signals.</div>
-        <div class="framework-mini-line">Turns "thin file" into a scoreable profile without requiring prior Spanish footprint.</div>
-      </div>
-      <div class="layer-addr">Addresses<br>empty registries</div>
-    </div>
-    <div class="framework-layer">
-      <div class="layer-num">II</div>
-      <div>
-        <div class="layer-name">Explainable modelling engine</div>
-        <div class="layer-desc">Gradient-boosted primary + offline challenger. SHAP + LIME as per-decision supporting mechanisms.</div>
-        <div class="framework-mini-line">Every score arrives with a rationale, not just a number.</div>
-      </div>
-      <div class="layer-addr">Addresses<br>training bias</div>
-    </div>
-    <div class="framework-layer">
-      <div class="layer-num">III</div>
-      <div>
-        <div class="layer-name">Fairness constraints</div>
-        <div class="layer-desc">Demographic parity, equalised odds, equal opportunity, disparate impact. Continuous proxy-leakage scanning.</div>
-        <div class="framework-mini-line">Continuous audit, not a one-off launch check. Rolls back on drift.</div>
-      </div>
-      <div class="layer-addr">Addresses<br>proxy discrimination</div>
-    </div>
-    <div class="framework-layer">
-      <div class="layer-num">IV</div>
-      <div>
-        <div class="layer-name">Human-in-the-loop governance</div>
-        <div class="layer-desc">Borderline cases routed to underwriters with the XAI dashboard. Tamper-evident audit trail. Adverse-action explanations. Appeal route.</div>
-        <div class="framework-mini-line">No customer rejected by a model in isolation.</div>
-      </div>
-      <div class="layer-addr">Addresses<br>AI Act Art. 14</div>
-    </div>
+  <h2 class="slide-title" style="font-size: clamp(1.5rem, 2.6vw, 2.1rem); margin-bottom: 0.5rem; max-width: 68rem;">Four integrated layers. <em>Every decision explained.</em></h2>
+  <p class="slide-lead" style="margin-bottom: 0.4rem; font-size: 13.5px; max-width: 65rem;">Not a single model — a compliance architecture. Each layer addresses a specific friction from slide 3.</p>
+  <div class="framework-diagram-wrap">
+    <svg viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <marker id="fw-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#A89A82"/>
+        </marker>
+      </defs>
+
+      <!-- LAYER 1 · Data enrichment (cobalt) -->
+      <rect x="10" y="10" width="980" height="145" rx="5" fill="#FAF7EE" stroke="#1E5BAA" stroke-width="1.2"/>
+      <rect x="10" y="10" width="4" height="145" fill="#1E5BAA"/>
+      <text x="30" y="38" font-family="Geist, sans-serif" font-size="11" font-weight="600" fill="#1E5BAA" letter-spacing="1.5">LAYER 1</text>
+      <text x="120" y="38" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">Data enrichment</text>
+      <text x="30" y="58" font-family="Geist, sans-serif" font-size="12" font-style="italic" fill="#6B5F52">Solving the "thin-file" problem via PSD2 open banking</text>
+      <!-- sub-cards -->
+      <rect x="30" y="75" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="45" y="98" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Cash-flow data</text>
+      <text x="45" y="116" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Cross-border transactions,</text>
+      <text x="45" y="131" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">consistency, volume</text>
+
+      <rect x="265" y="75" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="280" y="98" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Alternative signals</text>
+      <text x="280" y="116" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">SaaS, invoices, rent,</text>
+      <text x="280" y="131" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">utility consistency</text>
+
+      <rect x="500" y="75" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="515" y="98" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Behavioural data</text>
+      <text x="515" y="116" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">App usage patterns,</text>
+      <text x="515" y="131" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">financial discipline</text>
+
+      <rect x="735" y="75" width="245" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="750" y="98" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Remittance history</text>
+      <text x="750" y="116" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Volume, frequency,</text>
+      <text x="750" y="131" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">stability as income proxy</text>
+
+      <!-- Arrow 1→2 -->
+      <line x1="500" y1="158" x2="500" y2="175" stroke="#A89A82" stroke-width="1" marker-end="url(#fw-arrow)"/>
+
+      <!-- LAYER 2 · Explainable AI engine (petrol) -->
+      <rect x="10" y="180" width="980" height="145" rx="5" fill="#FAF7EE" stroke="#1D3A4D" stroke-width="1.2"/>
+      <rect x="10" y="180" width="4" height="145" fill="#1D3A4D"/>
+      <text x="30" y="208" font-family="Geist, sans-serif" font-size="11" font-weight="600" fill="#1D3A4D" letter-spacing="1.5">LAYER 2</text>
+      <text x="120" y="208" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">Explainable AI engine</text>
+      <text x="30" y="228" font-family="Geist, sans-serif" font-size="12" font-style="italic" fill="#6B5F52">Every score arrives with a rationale — not just a number</text>
+      <!-- sub-cards -->
+      <rect x="30" y="245" width="305" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="45" y="268" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">SHAP values</text>
+      <text x="45" y="286" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Per-feature contribution</text>
+      <text x="45" y="301" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">to each decision</text>
+
+      <rect x="345" y="245" width="305" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="360" y="268" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">LIME explanations</text>
+      <text x="360" y="286" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Local interpretability as a</text>
+      <text x="360" y="301" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">human-readable cross-check</text>
+
+      <rect x="660" y="245" width="320" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="675" y="268" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Challenger model</text>
+      <text x="675" y="286" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Offline uplift testing — never</text>
+      <text x="675" y="301" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">decides on live customers</text>
+
+      <!-- Arrow 2→3 -->
+      <line x1="500" y1="328" x2="500" y2="345" stroke="#A89A82" stroke-width="1" marker-end="url(#fw-arrow)"/>
+
+      <!-- LAYER 3 · Fairness constraints (gold) -->
+      <rect x="10" y="350" width="980" height="145" rx="5" fill="#FAF7EE" stroke="#B08545" stroke-width="1.2"/>
+      <rect x="10" y="350" width="4" height="145" fill="#B08545"/>
+      <text x="30" y="378" font-family="Geist, sans-serif" font-size="11" font-weight="600" fill="#B08545" letter-spacing="1.5">LAYER 3</text>
+      <text x="120" y="378" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">Fairness constraints</text>
+      <text x="30" y="398" font-family="Geist, sans-serif" font-size="12" font-style="italic" fill="#6B5F52">Four metrics, continuous. Rolls back on drift.</text>
+      <!-- sub-cards -->
+      <rect x="30" y="415" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="45" y="438" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Demographic parity</text>
+      <text x="45" y="456" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Equal approval rates</text>
+      <text x="45" y="471" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">across cohorts</text>
+
+      <rect x="265" y="415" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="280" y="438" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Equalised odds</text>
+      <text x="280" y="456" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Equal true + false positive</text>
+      <text x="280" y="471" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">rates per group</text>
+
+      <rect x="500" y="415" width="225" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="515" y="438" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Disparate impact</text>
+      <text x="515" y="456" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Four-fifths benchmark —</text>
+      <text x="515" y="471" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">target ratio ≥ 0.85</text>
+
+      <rect x="735" y="415" width="245" height="65" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="750" y="438" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Proxy detection</text>
+      <text x="750" y="456" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Continuous scanning for</text>
+      <text x="750" y="471" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">nationality leakage</text>
+
+      <!-- Arrow 3→4 -->
+      <line x1="500" y1="498" x2="500" y2="515" stroke="#A89A82" stroke-width="1" marker-end="url(#fw-arrow)"/>
+
+      <!-- LAYER 4 · Human-in-the-loop (soft cobalt) -->
+      <rect x="10" y="520" width="980" height="135" rx="5" fill="#FAF7EE" stroke="#5B8DD6" stroke-width="1.2"/>
+      <rect x="10" y="520" width="4" height="135" fill="#5B8DD6"/>
+      <text x="30" y="548" font-family="Geist, sans-serif" font-size="11" font-weight="600" fill="#5B8DD6" letter-spacing="1.5">LAYER 4</text>
+      <text x="120" y="548" font-family="Geist, sans-serif" font-size="16" font-weight="600" fill="#1A1611">Human-in-the-loop governance</text>
+      <text x="30" y="568" font-family="Geist, sans-serif" font-size="12" font-style="italic" fill="#6B5F52">EU AI Act Art. 14 compliance · AESIA oversight</text>
+      <!-- sub-cards -->
+      <rect x="30" y="585" width="305" height="60" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="45" y="608" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Human review</text>
+      <text x="45" y="626" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Borderline referrals to</text>
+      <text x="45" y="641" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">underwriters with XAI dashboard</text>
+
+      <rect x="345" y="585" width="305" height="60" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="360" y="608" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Audit trail</text>
+      <text x="360" y="626" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Full decision logging —</text>
+      <text x="360" y="641" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">tamper-evident, per model version</text>
+
+      <rect x="660" y="585" width="320" height="60" rx="3" fill="#EEE9DC" stroke="#D4CBB8" stroke-width="0.5"/>
+      <text x="675" y="608" font-family="Geist, sans-serif" font-size="12" font-weight="600" fill="#1A1611">Appeal mechanism</text>
+      <text x="675" y="626" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">Adverse-action rights —</text>
+      <text x="675" y="641" font-family="Geist, sans-serif" font-size="11" fill="#6B5F52">GDPR Art. 22 compliant</text>
+    </svg>
   </div>
 </section>
 
