@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transparent AI Framework · Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F1E8;
+  --bg-alt: #EEE9DC;
+  --bg-dark: #1A1611;
+  --fg: #1A1611;
+  --fg-muted: #6B5F52;
+  --fg-dim: #9B8F80;
+  --line: #D4CBB8;
+  --line-strong: #A89A82;
+  --terra: #1E5BAA;
+  --terra-soft: #5B8DD6;
+  --petrol: #1D3A4D;
+  --gold: #B08545;
+  --cream: #FAF7EE;
+  --serif: 'Geist', -apple-system, system-ui, sans-serif;
+  --sans: 'Geist', -apple-system, system-ui, sans-serif;
+  --mono: 'Geist Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-start; padding: 4vh 5.5vw 5vh; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 0.5s cubic-bezier(0.2,0,0.1,1), transform 0.5s cubic-bezier(0.2,0,0.1,1), visibility 0s linear 0.5s; overflow: hidden; }
+.slide.active { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.5s cubic-bezier(0.2,0,0.1,1), transform 0.5s cubic-bezier(0.2,0,0.1,1), visibility 0s linear 0s; }
+.slide-meta { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 1.4rem; padding-bottom: 1.2rem; border-bottom: 0.5px solid var(--line); flex-shrink: 0; }
+.slide-meta .left { display: flex; gap: 1.5rem; align-items: baseline; }
+.slide-meta .pillar-tag { color: var(--terra); font-weight: 500; }
+.slide-meta .dot { display: inline-block; width: 3px; height: 3px; background: var(--line-strong); border-radius: 50%; vertical-align: middle; margin: 0 0.5rem 2px; }
+.slide-meta .right { font-family: var(--mono); font-size: 10px; }
+.cover { justify-content: center; }
+.cover .cover-kicker { font-family: var(--sans); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--terra); font-weight: 500; margin-bottom: 2rem; }
+.cover h1 { font-family: var(--sans); font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 600; line-height: 0.95; letter-spacing: -0.035em; color: var(--fg); margin-bottom: 1.5rem; }
+.cover h1 em { font-style: italic; color: var(--petrol); font-weight: 500; }
+.cover .cover-sub { font-family: var(--serif); font-style: italic; font-size: clamp(1.15rem, 1.7vw, 1.55rem); font-weight: 400; color: var(--fg-muted); max-width: 52rem; margin-bottom: 3.5rem; line-height: 1.5; }
+.cover .cover-rule { width: 80px; height: 1px; background: var(--terra); margin-bottom: 2rem; }
+.cover .cover-meta { display: flex; gap: 3rem; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; }
+.cover .cover-meta span strong { color: var(--fg); font-weight: 500; display: block; margin-top: 4px; font-family: var(--serif); font-style: italic; font-size: 15px; letter-spacing: 0; text-transform: none; }
+.cover-corner-ornament { position: absolute; top: 5vh; right: 6vw; font-family: var(--serif); font-style: italic; color: var(--terra); font-size: 14px; }
+.pillars-overview .slide-title { font-family: var(--serif); font-size: clamp(2.5rem, 4.5vw, 4rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; color: var(--fg); margin-top: 3vh; margin-bottom: 1rem; max-width: 40rem; }
+.pillars-overview .slide-title em { font-style: italic; color: var(--petrol); }
+.pillars-overview .slide-sub { font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: var(--fg-muted); margin-bottom: 4vh; max-width: 45rem; }
+.pillars-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: auto; margin-bottom: auto; }
+.pillar-card { position: relative; padding: 2rem 1.5rem; border: 0.5px solid var(--line); background: var(--cream); display: flex; flex-direction: column; min-height: 220px; }
+.pillar-card:nth-child(1) { border-top: 2px solid var(--terra); }
+.pillar-card:nth-child(2) { border-top: 2px solid var(--petrol); }
+.pillar-card:nth-child(3) { border-top: 2px solid var(--gold); }
+.pillar-card:nth-child(4) { border-top: 2px solid var(--terra-soft); }
+.pillar-card:nth-child(5) { border-top: 2px solid var(--fg); }
+.pillar-roman { font-family: var(--serif); font-weight: 300; font-size: 2.8rem; line-height: 1; letter-spacing: -0.04em; color: var(--fg); margin-bottom: 1.5rem; font-style: italic; }
+.pillar-label { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 0.5rem; font-weight: 500; }
+.pillar-name { font-family: var(--serif); font-size: 1.25rem; line-height: 1.15; color: var(--fg); font-weight: 400; margin-bottom: auto; }
+.pillar-desc { font-size: 12px; color: var(--fg-muted); line-height: 1.5; margin-top: 1rem; padding-top: 1rem; border-top: 0.5px solid var(--line); }
+.pillar-divider { justify-content: center; background: var(--bg-alt); position: relative; }
+.pillar-divider::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--terra); }
+.pillar-divider .divider-row { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: start; max-width: 1400px; }
+.pillar-divider .divider-numeral { font-family: var(--serif); font-weight: 200; font-size: clamp(10rem, 22vw, 24rem); line-height: 0.8; color: var(--terra); font-style: italic; letter-spacing: -0.04em; text-align: right; }
+.pillar-divider .divider-content { padding-top: 3rem; border-left: 0.5px solid var(--line-strong); padding-left: 3rem; }
+.pillar-divider .divider-kicker { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; margin-bottom: 2rem; }
+.pillar-divider .divider-title { font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300; line-height: 1; letter-spacing: -0.025em; color: var(--fg); margin-bottom: 2rem; }
+.pillar-divider .divider-title em { font-style: italic; color: var(--petrol); }
+.pillar-divider .divider-sub { font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--fg-muted); line-height: 1.5; max-width: 38rem; }
+.pillar-divider[data-color="petrol"]::before { background: var(--petrol); }
+.pillar-divider[data-color="petrol"] .divider-numeral { color: var(--petrol); }
+.pillar-divider[data-color="gold"]::before { background: var(--gold); }
+.pillar-divider[data-color="gold"] .divider-numeral { color: var(--gold); }
+.pillar-divider[data-color="dark"]::before { background: var(--fg); }
+.pillar-divider[data-color="dark"] .divider-numeral { color: var(--fg); }
+.slide-title { font-family: var(--sans); font-size: clamp(1.75rem, 3.2vw, 2.7rem); font-weight: 600; line-height: 1.15; letter-spacing: -0.025em; color: var(--fg); margin-top: 0.5rem; margin-bottom: 1rem; max-width: 56rem; }
+.slide-title em { font-style: italic; color: var(--petrol); font-weight: 500; }
+.slide-title strong { font-weight: 600; color: var(--fg); }
+.slide-eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--terra); font-weight: 600; margin-bottom: 0.7rem; margin-top: 0; }
+.slide-lead { font-family: var(--sans); font-style: italic; font-size: clamp(1rem, 1.25vw, 1.2rem); color: var(--fg-muted); line-height: 1.55; max-width: 56rem; margin-bottom: 2.2rem; font-weight: 400; }
+.content-body { flex: 1; display: flex; min-height: 0; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; flex: 1; align-items: start; }
+.six-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; align-self: stretch; }
+.bias-card { border-top: 0.5px solid var(--terra); padding-top: 1rem; position: relative; }
+.bias-card .num { font-family: var(--serif); font-style: italic; color: var(--terra); font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem; }
+.bias-card h4 { font-family: var(--serif); font-size: 1.05rem; font-weight: 500; color: var(--fg); line-height: 1.2; margin-bottom: 0.5rem; }
+.bias-card p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; }
+.cost-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+.cost-table th, .cost-table td { text-align: left; padding: 1.1rem 1rem 1.1rem 0; font-size: 15px; border-bottom: 0.5px solid var(--line); vertical-align: top; line-height: 1.55; }
+.cost-table thead th { font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); font-weight: 600; padding-bottom: 0.8rem; }
+.cost-table tbody th { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; color: var(--fg); width: 22%; }
+.cost-table tbody td { color: var(--fg-muted); width: 39%; }
+.cost-table tbody td.year3 { color: var(--fg); font-weight: 500; font-family: var(--serif); }
+.cost-table tr:last-child th, .cost-table tr:last-child td { border-bottom: none; }
+.framework-diagram { display: flex; flex-direction: column; gap: 0.7rem; flex: 1; justify-content: center; max-height: 70vh; }
+.framework-layer { position: relative; padding: 1.1rem 1.6rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1.8rem; align-items: center; background: var(--cream); border: 0.5px solid var(--line); border-left: 3px solid var(--terra); }
+.framework-layer:nth-child(1) { border-left-color: var(--terra); }
+.framework-layer:nth-child(2) { border-left-color: var(--petrol); }
+.framework-layer:nth-child(3) { border-left-color: var(--gold); }
+.framework-layer:nth-child(4) { border-left-color: var(--fg); }
+.framework-layer .layer-num { font-family: var(--serif); font-style: italic; font-size: 2.2rem; font-weight: 400; color: var(--fg-dim); width: 2.5rem; }
+.framework-layer .layer-name { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; color: var(--fg); margin-bottom: 0.25rem; }
+.framework-layer .layer-desc { font-size: 14.5px; color: var(--fg-muted); line-height: 1.55; }
+.framework-layer .layer-addr { font-family: var(--sans); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--fg-dim); text-align: right; max-width: 180px; line-height: 1.55; font-weight: 500; }
+.layer-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 0.5rem; }
+.layer-header .layer-tag { font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terra); font-weight: 500; }
+.layer-header .layer-big-num { font-family: var(--serif); font-style: italic; font-size: 2.2rem; font-weight: 300; color: var(--fg); line-height: 1; }
+.feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem 3rem; margin-top: 2rem; }
+.feature { padding-left: 1rem; border-left: 0.5px solid var(--line); }
+.feature h5 { font-family: var(--serif); font-size: 1.05rem; font-weight: 500; margin-bottom: 0.35rem; }
+.feature p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; }
+.augmented-scene { display: grid; grid-template-columns: 0.85fr auto 1.4fr; gap: 2rem; align-items: center; flex: 1; padding: 0.5rem 0; min-height: 0; }
+.aug-col { padding: 1rem 0.5rem; }
+.aug-col.before { opacity: 0.7; padding-right: 1rem; }
+.aug-col.after { padding: 0; }
+.aug-col .aug-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 1.2rem; font-weight: 600; }
+.aug-col.after .aug-label { color: var(--terra); }
+.aug-col h4 { font-family: var(--serif); font-size: 1.5rem; font-weight: 500; line-height: 1.25; margin-bottom: 1rem; }
+.aug-col p { font-size: 15px; color: var(--fg-muted); line-height: 1.6; margin-bottom: 1rem; }
+.aug-arrow { font-family: var(--serif); font-size: 3rem; color: var(--terra); font-style: italic; font-weight: 400; }
+.finmodel { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+.finmodel th, .finmodel td { text-align: left; padding: 0.9rem 1rem 0.9rem 0; border-bottom: 0.5px solid var(--line); font-size: 14px; }
+.finmodel thead th { font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; padding-bottom: 0.8rem; }
+.finmodel tbody th { font-weight: 400; color: var(--fg); font-size: 14px; width: 35%; }
+.finmodel tbody td { color: var(--fg-muted); font-family: var(--mono); font-size: 13px; width: 32.5%; }
+.finmodel tbody tr.total th { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; padding-top: 1.5rem; }
+.finmodel tbody tr.total td { color: var(--terra); font-family: var(--serif); font-size: 1.1rem; font-weight: 500; padding-top: 1.5rem; }
+.finmodel tbody tr.spacer td, .finmodel tbody tr.spacer th { padding: 0; border: none; height: 0.5rem; }
+.kpi-triangle { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; align-self: stretch; margin-top: 0.5rem; flex: 1; }
+.kpi-card { position: relative; padding: 2rem 1.75rem; background: var(--cream); border: 0.5px solid var(--line); display: flex; flex-direction: column; }
+.kpi-card::before { content: ''; position: absolute; top: 0; left: 0; height: 2px; background: var(--terra); width: 40px; }
+.kpi-card:nth-child(2)::before { background: var(--petrol); }
+.kpi-card:nth-child(3)::before { background: var(--gold); }
+.kpi-num { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 2.6rem; line-height: 1; color: var(--fg); margin-bottom: 1.2rem; letter-spacing: -0.03em; }
+.kpi-name { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; color: var(--fg); margin-bottom: 0.8rem; line-height: 1.2; }
+.kpi-def { font-size: 14.5px; color: var(--fg-muted); line-height: 1.6; margin-bottom: auto; padding-bottom: 1.5rem; }
+.kpi-target { border-top: 0.5px solid var(--line); padding-top: 1rem; }
+.kpi-target-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); font-weight: 600; margin-bottom: 0.4rem; }
+.kpi-target-val { font-family: var(--serif); font-size: 15px; font-weight: 500; color: var(--terra); line-height: 1.4; }
+.val-stack { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2rem; }
+.val-input { padding: 1.5rem 1.25rem; border-top: 2px solid var(--terra); background: var(--cream); }
+.val-input h5 { font-family: var(--serif); font-size: 1rem; font-weight: 500; margin-bottom: 0.8rem; line-height: 1.2; }
+.val-input .val-delta { font-family: var(--mono); font-size: 11px; color: var(--terra); letter-spacing: 0.05em; margin-bottom: 0.75rem; font-weight: 500; }
+.val-input p { font-size: 12px; color: var(--fg-muted); line-height: 1.55; }
+.compliance-table { width: 100%; border-collapse: collapse; }
+.compliance-table th, .compliance-table td { text-align: left; padding: 0.75rem 1rem 0.75rem 0; border-bottom: 0.5px solid var(--line); vertical-align: top; font-size: 13px; line-height: 1.5; }
+.compliance-table thead th { font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; padding-bottom: 0.8rem; }
+.compliance-table tbody th { font-family: var(--mono); font-size: 12px; color: var(--terra); font-weight: 500; width: 18%; }
+.compliance-table td:nth-child(2) { width: 52%; color: var(--fg); }
+.compliance-table td:nth-child(3) { width: 30%; color: var(--fg-muted); font-family: var(--serif); font-style: italic; font-size: 13px; }
+.human-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; flex: 1; align-self: stretch; margin-top: 2rem; }
+.human-col { border-top: 2px solid var(--petrol); padding-top: 1.5rem; }
+.human-col:nth-child(2) { border-top-color: var(--terra); }
+.human-col:nth-child(3) { border-top-color: var(--gold); }
+.human-col h4 { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; margin-bottom: 1rem; }
+.human-col p { font-size: 13.5px; color: var(--fg-muted); line-height: 1.6; }
+.tech-spain-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; flex: 1; align-items: center; padding: 2rem 0; }
+.tech-spain-left .big-quote { font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 300; line-height: 1.2; letter-spacing: -0.01em; color: var(--fg); margin-bottom: 2rem; }
+.tech-spain-left .big-quote em { font-style: italic; color: var(--petrol); }
+.tech-spain-left .quote-attrib { font-family: var(--serif); font-style: italic; color: var(--fg-muted); font-size: 15px; }
+.aesia-card { padding: 2.5rem; background: var(--cream); border: 0.5px solid var(--line); border-top: 3px solid var(--terra); }
+.aesia-card .aesia-acronym { font-family: var(--serif); font-size: 3rem; font-weight: 300; letter-spacing: -0.02em; color: var(--terra); line-height: 1; margin-bottom: 0.5rem; }
+.aesia-card .aesia-full { font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--fg-muted); margin-bottom: 1.5rem; }
+.aesia-card p { font-size: 13.5px; color: var(--fg); line-height: 1.65; }
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; flex: 1; align-self: stretch; margin-top: 2rem; }
+.phase { background: var(--cream); border: 0.5px solid var(--line); padding: 2rem 1.75rem; display: flex; flex-direction: column; position: relative; }
+.phase::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.phase:nth-child(1)::before { background: var(--terra); }
+.phase:nth-child(2)::before { background: var(--petrol); }
+.phase:nth-child(3)::before { background: var(--gold); }
+.phase .phase-label { font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; margin-bottom: 0.5rem; }
+.phase .phase-name { font-family: var(--serif); font-size: 1.8rem; font-weight: 400; font-style: italic; color: var(--fg); margin-bottom: 0.3rem; line-height: 1; }
+.phase .phase-months { font-family: var(--mono); font-size: 12px; color: var(--terra); margin-bottom: 1.5rem; font-weight: 500; }
+.phase .phase-scope { font-size: 13px; color: var(--fg-muted); line-height: 1.6; margin-bottom: auto; padding-bottom: 1.5rem; }
+.phase .phase-exit { border-top: 0.5px solid var(--line); padding-top: 1rem; }
+.phase .phase-exit-label { font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; margin-bottom: 0.4rem; }
+.phase .phase-exit-val { font-family: var(--serif); font-style: italic; font-size: 13px; color: var(--fg); line-height: 1.45; }
+.roadblock-hero { flex: 1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center; padding: 2rem 0; }
+.roadblock-headline { font-family: var(--serif); font-size: clamp(2rem, 3.8vw, 3.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.02em; }
+.roadblock-headline .strike { color: var(--fg-dim); text-decoration: line-through; text-decoration-thickness: 1px; text-decoration-color: var(--terra); }
+.roadblock-headline em { font-style: italic; color: var(--terra); }
+.roadblock-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 1.5rem; font-weight: 500; }
+.roadblock-desc { font-size: 15px; color: var(--fg-muted); line-height: 1.65; margin-top: 2rem; max-width: 30rem; }
+.mitigations { list-style: none; counter-reset: mit; }
+.mitigations li { position: relative; padding-left: 2.5rem; padding-top: 0.5rem; padding-bottom: 1.3rem; margin-bottom: 1.3rem; border-bottom: 0.5px solid var(--line); }
+.mitigations li:last-child { border-bottom: none; }
+.mitigations li::before { content: counter(mit) "."; position: absolute; left: 0; top: 0; font-family: var(--serif); font-style: italic; color: var(--terra); font-size: 1.5rem; font-weight: 400; counter-increment: mit; }
+.mitigations strong { display: block; font-family: var(--serif); font-size: 1.1rem; font-weight: 500; color: var(--fg); margin-bottom: 0.3rem; line-height: 1.25; }
+.mitigations span { font-size: 13.5px; color: var(--fg-muted); line-height: 1.6; }
+.thesis { justify-content: center; background: var(--bg-dark); color: var(--cream); }
+.thesis .slide-meta { color: var(--fg-dim); border-bottom-color: #3A3228; }
+.thesis .slide-meta .pillar-tag { color: var(--terra-soft); }
+.thesis .thesis-pre { font-family: var(--sans); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--terra-soft); font-weight: 500; margin-bottom: 2rem; }
+.thesis-body { max-width: 60rem; }
+.thesis-quote { font-family: var(--sans); font-size: clamp(1.8rem, 3.8vw, 3.4rem); font-weight: 500; line-height: 1.2; letter-spacing: -0.025em; margin-bottom: 3rem; }
+.thesis-quote .strike { color: #5A4E42; text-decoration: line-through; text-decoration-color: var(--terra-soft); text-decoration-thickness: 2px; }
+.thesis-quote em { font-style: italic; color: var(--terra-soft); }
+.thesis-attribution { font-family: var(--serif); font-style: italic; color: var(--fg-dim); font-size: 1.1rem; padding-top: 2rem; border-top: 0.5px solid #3A3228; max-width: 40rem; }
+.thanks { justify-content: center; text-align: center; align-items: center; }
+.thanks .slide-meta { width: 100%; }
+.thanks-body { text-align: center; }
+.thanks h2 { font-family: var(--serif); font-size: clamp(5rem, 12vw, 11rem); font-weight: 300; font-style: italic; line-height: 0.95; letter-spacing: -0.04em; color: var(--fg); margin-bottom: 2rem; }
+.thanks h2 em { color: var(--terra); }
+.thanks-sub { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--fg-muted); margin-bottom: 3rem; }
+.thanks-rule { width: 60px; height: 1px; background: var(--terra); margin: 0 auto 2rem; }
+.thanks-qa { font-family: var(--sans); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-muted); font-weight: 500; }
+.spain-system { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; align-self: stretch; }
+.system-node { padding: 1.5rem 1.25rem; background: var(--cream); border: 0.5px solid var(--line); border-top: 2px solid var(--petrol); position: relative; }
+.system-node h5 { font-family: var(--serif); font-size: 1.15rem; font-weight: 500; margin-bottom: 0.25rem; }
+.system-node .system-sub { font-family: var(--serif); font-style: italic; font-size: 12px; color: var(--fg-muted); margin-bottom: 1rem; }
+.system-node p { font-size: 12.5px; color: var(--fg); line-height: 1.55; }
+.system-node .tag { position: absolute; top: 0.75rem; right: 1.25rem; font-family: var(--mono); font-size: 10px; color: var(--fg-dim); letter-spacing: 0.05em; }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 3px; background: transparent; z-index: 100; pointer-events: none; }
+.progress-bar { height: 100%; background: var(--terra); width: 0%; transition: width 0.4s cubic-bezier(0.2,0,0.1,1); }
+.slide-counter { position: fixed; bottom: 1.5rem; right: 2rem; font-family: var(--mono); font-size: 11px; color: var(--fg-muted); letter-spacing: 0.08em; z-index: 99; background: var(--bg); padding: 0.3rem 0.6rem; border: 0.5px solid var(--line); }
+.hint { position: fixed; bottom: 1.5rem; left: 2rem; font-family: var(--sans); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim); z-index: 99; display: flex; gap: 1rem; align-items: center; background: var(--bg); padding: 0.3rem 0.6rem; border: 0.5px solid var(--line); }
+.hint kbd { font-family: var(--mono); background: var(--cream); border: 0.5px solid var(--line); padding: 1px 5px; font-size: 10px; border-radius: 2px; }
+.overview-mode { position: fixed; inset: 0; background: var(--bg); z-index: 200; overflow-y: auto; padding: 4rem 4rem 6rem; display: none; }
+.overview-mode.active { display: block; }
+.overview-mode h2 { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: 2.5rem; margin-bottom: 2rem; color: var(--fg); }
+.overview-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.overview-thumb { aspect-ratio: 16/10; background: var(--cream); border: 0.5px solid var(--line); padding: 0.8rem; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.15s; font-size: 10px; }
+.overview-thumb:hover { border-color: var(--terra); transform: translateY(-2px); }
+.overview-thumb .thumb-num { font-family: var(--mono); color: var(--fg-muted); }
+.overview-thumb .thumb-title { font-family: var(--serif); font-size: 11px; line-height: 1.2; color: var(--fg); }
+@media print {
+  html, body { overflow: visible; height: auto; }
+  .bottom-nav, .slide-counter, .hint { display: none; }
+  .slide { position: relative; page-break-after: always; height: 100vh; opacity: 1 !important; visibility: visible !important; transform: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+<!-- Additional CSS for compound merged slides -->
+<style>
+/* Slide 3 — Spain system + bias compound */
+.compound-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; flex: 1; align-self: stretch; min-height: 0; }
+.compound-col { display: flex; flex-direction: column; min-height: 0; }
+.compound-col-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terra); font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 0.5px solid var(--line); }
+.compound-col-label.right-label { color: var(--petrol); }
+.system-stack { display: flex; flex-direction: column; gap: 0.75rem; }
+.system-mini { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 0.95rem 0; border-bottom: 0.5px solid var(--line); align-items: baseline; }
+.system-mini:last-child { border-bottom: none; }
+.system-mini .mini-num { font-family: var(--serif); font-style: italic; color: var(--terra); font-size: 1.2rem; line-height: 1; width: 1.5rem; font-weight: 500; }
+.system-mini .mini-name { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; color: var(--fg); margin-bottom: 0.25rem; }
+.system-mini .mini-desc { font-size: 14px; color: var(--fg-muted); line-height: 1.55; }
+.bias-stack { display: flex; flex-direction: column; gap: 0.6rem; }
+.bias-mini { padding: 1rem 0; border-bottom: 0.5px solid var(--line); }
+.bias-mini:last-child { border-bottom: none; }
+.bias-mini .bias-mini-num { font-family: var(--mono); font-size: 11px; color: var(--petrol); letter-spacing: 0.1em; margin-bottom: 0.4rem; font-weight: 500; }
+.bias-mini h5 { font-family: var(--serif); font-size: 1.1rem; font-weight: 500; line-height: 1.25; margin-bottom: 0.4rem; }
+.bias-mini p { font-size: 13.5px; color: var(--fg-muted); line-height: 1.55; }
+/* Slide 7 — ROI + Valuation stacked */
+.roi-stack { display: flex; flex-direction: column; gap: 1.8rem; flex: 1; align-self: stretch; min-height: 0; }
+.roi-top { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; padding: 1.6rem 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.roi-num-block { display: flex; flex-direction: column; }
+.roi-num-block .roi-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 0.7rem; font-weight: 600; }
+.roi-num-block .roi-num { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 2.5rem; line-height: 1.1; color: var(--fg); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+.roi-num-block .roi-num em { color: var(--terra); font-style: italic; }
+.roi-num-block .roi-desc { font-size: 14px; color: var(--fg-muted); line-height: 1.6; max-width: 26rem; }
+.val-row-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terra); font-weight: 600; margin-bottom: 1rem; }
+.val-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.val-mini { padding: 1.1rem 1.2rem; border-top: 1.5px solid var(--terra); background: var(--cream); }
+.val-mini h6 { font-family: var(--serif); font-size: 1.05rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.2; }
+.val-mini .val-mini-tag { font-family: var(--mono); font-size: 10.5px; color: var(--terra); letter-spacing: 0.05em; margin-bottom: 0.6rem; font-weight: 500; }
+.val-mini p { font-size: 13px; color: var(--fg-muted); line-height: 1.55; }
+/* Slide 9 — Ethics 3-col synthesis */
+.ethics-3col { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 2rem; flex: 1; align-self: stretch; margin-top: 1rem; min-height: 0; }
+.ethics-col { display: flex; flex-direction: column; padding-top: 1.2rem; border-top: 2px solid var(--terra); min-height: 0; }
+.ethics-col:nth-child(2) { border-top-color: var(--petrol); }
+.ethics-col:nth-child(3) { border-top-color: var(--gold); }
+.ethics-col-label { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 0.7rem; font-weight: 600; }
+.ethics-col h4 { font-family: var(--serif); font-size: 1.3rem; font-weight: 500; line-height: 1.2; margin-bottom: 1.1rem; }
+.ethics-col .ethics-row { padding: 0.7rem 0; border-bottom: 0.5px solid var(--line); font-size: 13.5px; line-height: 1.55; display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; }
+.ethics-col .ethics-row:last-child { border-bottom: none; }
+.ethics-col .ethics-row .er-tag { font-family: var(--mono); font-size: 11px; color: var(--terra); letter-spacing: 0.05em; font-weight: 600; min-width: 3.2rem; padding-top: 0.1rem; }
+.ethics-col:nth-child(2) .ethics-row .er-tag { color: var(--petrol); }
+.ethics-col:nth-child(3) .ethics-row .er-tag { color: var(--gold); }
+.ethics-col .ethics-row .er-text { color: var(--fg-muted); }
+.ethics-col .ethics-row .er-text strong { color: var(--fg); font-weight: 500; }
+.ethics-col .ethics-prose { font-size: 14px; color: var(--fg-muted); line-height: 1.6; }
+.ethics-col .ethics-prose strong { color: var(--fg); font-weight: 500; }
+/* Slide 10 — Roadmap + roadblock stacked */
+.exec-stack { display: flex; flex-direction: column; gap: 1.8rem; flex: 1; align-self: stretch; min-height: 0; }
+.roadmap-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.phase-mini { padding: 1.3rem 1.4rem; background: var(--cream); border: 0.5px solid var(--line); position: relative; }
+.phase-mini::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.phase-mini:nth-child(1)::before { background: var(--terra); }
+.phase-mini:nth-child(2)::before { background: var(--petrol); }
+.phase-mini:nth-child(3)::before { background: var(--gold); }
+.phase-mini .pm-label { font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 0.4rem; font-weight: 600; }
+.phase-mini .pm-name { font-family: var(--serif); font-size: 1.4rem; font-weight: 500; font-style: italic; color: var(--fg); margin-bottom: 0.3rem; line-height: 1; }
+.phase-mini .pm-months { font-family: var(--mono); font-size: 12px; color: var(--terra); margin-bottom: 0.8rem; font-weight: 500; }
+.phase-mini .pm-scope { font-size: 13.5px; color: var(--fg-muted); line-height: 1.55; }
+.roadblock-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 2.5rem; padding-top: 1.4rem; border-top: 0.5px solid var(--line); align-items: start; }
+.roadblock-row .rb-label { font-family: var(--sans); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 0.7rem; font-weight: 600; }
+.roadblock-row .rb-headline { font-family: var(--serif); font-size: 1.7rem; font-weight: 400; line-height: 1.15; }
+.roadblock-row .rb-headline .strike { color: var(--fg-dim); text-decoration: line-through; text-decoration-color: var(--terra); }
+.roadblock-row .rb-headline em { font-style: italic; color: var(--terra); }
+.roadblock-row .rb-desc { font-size: 13.5px; color: var(--fg-muted); line-height: 1.6; margin-top: 0.9rem; }
+.mit-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.mit-mini { font-size: 13.5px; line-height: 1.55; padding-left: 1.2rem; position: relative; }
+.mit-mini::before { content: ''; position: absolute; left: 0; top: 0.5rem; width: 0.4rem; height: 0.4rem; background: var(--terra); border-radius: 50%; }
+.mit-mini strong { display: block; font-family: var(--serif); font-size: 1.05rem; font-weight: 500; color: var(--fg); margin-bottom: 0.35rem; line-height: 1.25; }
+.mit-mini span { color: var(--fg-muted); }
+/* Slide 11 — Marketing placeholder */
+.placeholder-frame { flex: 1; align-self: stretch; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px dashed var(--line-strong); padding: 4rem; background: var(--bg-alt); position: relative; margin-top: 2rem; }
+.placeholder-frame .ph-label { font-family: var(--sans); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 1.5rem; font-weight: 500; }
+.placeholder-frame .ph-title { font-family: var(--serif); font-size: 2.5rem; font-style: italic; font-weight: 300; color: var(--fg); margin-bottom: 1rem; text-align: center; line-height: 1.2; }
+.placeholder-frame .ph-sub { font-family: var(--serif); font-style: italic; font-size: 1.05rem; color: var(--fg-muted); text-align: center; max-width: 35rem; line-height: 1.5; margin-bottom: 2rem; }
+.placeholder-frame .ph-meta { font-family: var(--mono); font-size: 11px; color: var(--terra); letter-spacing: 0.1em; }
+.framework-mini-line { font-size: 11.5px; color: var(--fg-dim); font-style: italic; font-family: var(--serif); margin-top: 0.3rem; }
+/* Slide 11 — Clarity Corridor campaign */
+.campaign-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; flex: 1; align-self: stretch; margin-top: 0.5rem; min-height: 0; }
+.tactic-col { background: var(--cream); border: 0.5px solid var(--line); padding: 1.8rem 1.6rem; position: relative; display: flex; flex-direction: column; }
+.tactic-col::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--terra); }
+.tactic-col:nth-child(2)::before { background: var(--petrol); }
+.tactic-col:nth-child(3)::before { background: var(--gold); }
+.tactic-col .tactic-num { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 2.1rem; line-height: 1; color: var(--fg); margin-bottom: 1rem; letter-spacing: -0.03em; }
+.tactic-col .tactic-tag { font-family: var(--sans); font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--terra); font-weight: 600; margin-bottom: 0.5rem; }
+.tactic-col:nth-child(2) .tactic-tag { color: var(--petrol); }
+.tactic-col:nth-child(3) .tactic-tag { color: var(--gold); }
+.tactic-col h4 { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; line-height: 1.2; margin-bottom: 1rem; color: var(--fg); }
+.tactic-col p { font-size: 14px; color: var(--fg-muted); line-height: 1.6; }
+/* Slide 6 — Underwriter XAI dashboard mockup */
+.dashboard-mock { background: #FFFFFF; border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 6px 24px rgba(26, 22, 17, 0.08), 0 1px 3px rgba(26, 22, 17, 0.05); font-family: var(--sans); overflow: hidden; }
+.dash-header { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1rem; background: var(--bg-dark); color: #D4CBB8; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+.dash-header .dash-app-tag { color: var(--terra-soft); font-weight: 600; }
+.dash-header .dash-app-id { font-family: var(--mono); letter-spacing: 0.04em; flex: 1; color: #9B8F80; }
+.dash-header .dash-app-status { background: var(--terra); color: white; padding: 3px 8px; border-radius: 2px; font-size: 9px; font-weight: 600; letter-spacing: 0.12em; }
+.dash-applicant { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; }
+.dash-applicant .dash-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 500; color: var(--fg); font-style: italic; }
+.dash-applicant .dash-meta { font-size: 11px; color: var(--fg-muted); letter-spacing: 0.02em; font-family: var(--mono); }
+.dash-section { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--line); }
+.dash-section-label { font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted); font-weight: 600; margin-bottom: 0.55rem; }
+.dash-score-row { display: grid; grid-template-columns: auto 1fr auto; gap: 0.9rem; align-items: center; }
+.dash-score-num { font-family: var(--serif); font-style: italic; font-size: 1.85rem; font-weight: 500; color: var(--fg); line-height: 1; letter-spacing: -0.02em; }
+.dash-score-bar { height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden; }
+.dash-score-fill { height: 100%; background: linear-gradient(to right, var(--terra) 0%, var(--gold) 100%); border-radius: 3px; }
+.dash-score-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra); font-weight: 600; }
+.dash-shap { display: flex; flex-direction: column; gap: 0.42rem; }
+.shap-row { display: grid; grid-template-columns: 1rem 1fr 0.9fr; gap: 0.7rem; align-items: center; font-size: 11.5px; }
+.shap-sign { font-family: var(--mono); font-weight: 700; font-size: 13px; text-align: center; }
+.shap-sign.pos { color: var(--petrol); }
+.shap-sign.neg { color: var(--terra); }
+.shap-feat { color: var(--fg); font-weight: 400; }
+.shap-bar { height: 5px; background: var(--bg-alt); border-radius: 2px; overflow: hidden; }
+.shap-fill { height: 100%; border-radius: 2px; }
+.shap-fill.pos { background: var(--petrol); }
+.shap-fill.neg { background: var(--terra); }
+.dash-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--line); }
+.dash-mini { display: flex; flex-direction: column; gap: 0.3rem; }
+.dash-mini-label { font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); font-weight: 600; }
+.dash-mini-val { font-family: var(--serif); font-size: 14px; font-weight: 500; color: var(--fg); display: flex; align-items: baseline; gap: 0.4rem; }
+.dash-mini-val.mono-val { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; font-weight: 400; }
+.ratio-num { font-style: italic; font-size: 1.05rem; }
+.ratio-tag { font-family: var(--sans); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; padding: 2px 6px; border-radius: 2px; }
+.ratio-tag.pass { background: rgba(15, 110, 86, 0.14); color: #0F6E56; }
+.dash-actions { display: flex; gap: 0.5rem; padding: 0.7rem 1.1rem; background: var(--bg-alt); }
+.dash-btn { flex: 1; padding: 0.55rem 0.7rem; font-family: var(--sans); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; border-radius: 2px; cursor: pointer; background: white; color: var(--fg); border: 1px solid var(--line); }
+.dash-btn.approve { background: var(--petrol); color: white; border-color: var(--petrol); }
+.dash-btn.escalate { background: var(--terra); color: white; border-color: var(--terra); }
+.dashboard-caption { font-family: var(--serif); font-style: italic; font-size: 12.5px; color: var(--fg-muted); text-align: center; margin-top: 0.7rem; line-height: 1.45; }
+</style>
+
+<!-- SLIDE 1 — COVER -->
+<section class="slide cover active">
+  <div class="cover-corner-ornament">Pitch · April 2026</div>
+  <div class="cover-kicker">AI Ethics Challenge</div>
+  <h1>Transparent <em>AI</em><br>for Fair Credit<br>Scoring</h1>
+  <div class="cover-rule"></div>
+  <p class="cover-sub">A Madrid neo-bank's path to inclusive, explainable, and legally compliant AI-driven lending — built on a four-layer framework, sequenced over twelve months.</p>
+  <div class="cover-meta">
+    <span>Prepared for<strong>Geneva Business School</strong></span>
+    <span>Client<strong>Madrid-based neo-bank</strong></span>
+    <span>Deadline<strong>EU AI Act · 2 August 2026</strong></span>
+  </div>
+</section>
+
+<!-- SLIDE 2 — THE PROBLEM -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">01</span><span class="dot"></span><span>The business problem</span></div><div class="right">02 / 12</div></div>
+  <div class="slide-eyebrow">The problem</div>
+  <h2 class="slide-title">The neo-bank is <em>leaving creditworthy applicants on the table</em> because its model cannot read them.</h2>
+  <p class="slide-lead">Approval rates on applicants of emerging-market origin are materially lower than on applicants with local Spanish footprints — even after controlling for observable creditworthiness.</p>
+  <div class="content-body" style="align-items: flex-start; margin-top: 0.5rem;">
+    <div class="two-col" style="align-items: start;">
+      <div>
+        <p style="font-size: 16px; color: var(--fg); line-height: 1.65; margin-bottom: 1.5rem;">The model is not wrong on average. It is <strong>systematically wrong on one specific cohort</strong>, and that cohort is both growing and commercially valuable.</p>
+        <p style="font-size: 16px; color: var(--fg-muted); line-height: 1.65;">Every rejected-but-creditworthy applicant is a double loss: a missed revenue line today, and a future customer acquired by a competitor that can read alternative data.</p>
+      </div>
+      <div>
+        <div style="border-left: 2px solid var(--terra); padding-left: 2rem;">
+          <div style="font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 2.2rem; line-height: 1.15; color: var(--fg); letter-spacing: -0.02em;">A sizable, accelerating segment.</div>
+          <div style="font-family: var(--serif); font-size: 1.05rem; color: var(--fg-muted); margin-top: 1rem; margin-bottom: 0.5rem; font-style: italic; line-height: 1.45;">Foreign-born entrepreneurs, freelancers, and self-employed professionals across Spain.</div>
+          <div style="font-size: 14px; color: var(--fg-muted); line-height: 1.6; margin-top: 1rem;">Cohort-level mispricing compounds quickly. The first lender to score it accurately keeps it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 — SPAIN'S SYSTEM CREATES THE BIAS -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">02</span><span class="dot"></span><span>Where the bias comes from</span></div><div class="right">03 / 12</div></div>
+  <div class="slide-eyebrow">Spain's credit system → structural blind spots</div>
+  <h2 class="slide-title">Spain has <em>no universal score</em>. It has four inputs — and three blind spots.</h2>
+  <p class="slide-lead">The bias is not a model flaw in isolation. It is a structural consequence of the inputs Spanish credit assessment is built on.</p>
+  <div class="compound-2col">
+    <div class="compound-col">
+      <div class="compound-col-label">The four inputs</div>
+      <div class="system-stack">
+        <div class="system-mini"><span class="mini-num">I</span><div><div class="mini-name">CIRBE — Banco de España</div><div class="mini-desc">Central risk register, exposures above €1,000. Records loans, not defaults.</div></div></div>
+        <div class="system-mini"><span class="mini-num">II</span><div><div class="mini-name">ASNEF · BADEXCUG</div><div class="mini-desc">Private negative-only files under AEPD oversight. Binary, no gradient.</div></div></div>
+        <div class="system-mini"><span class="mini-num">III</span><div><div class="mini-name">Documentation</div><div class="mini-desc">Nómina, Hacienda, Seguridad Social — implicitly requires a local footprint.</div></div></div>
+        <div class="system-mini"><span class="mini-num">IV</span><div><div class="mini-name">The internal model</div><div class="mini-desc">The lender's own engine combining the above. Where the bias is produced.</div></div></div>
+      </div>
+    </div>
+    <div class="compound-col">
+      <div class="compound-col-label right-label">The blind spots they create</div>
+      <div class="bias-stack">
+        <div class="bias-mini">
+          <div class="bias-mini-num">A · INVISIBILITY</div>
+          <h5>An empty registry is read as risk, not as absence of data.</h5>
+          <p>Applicants without CIRBE history or Seguridad Social affiliation give the model nothing to score. Foreign credit performance is invisible. The default response is rejection.</p>
+        </div>
+        <div class="bias-mini">
+          <div class="bias-mini-num">B · PROXY</div>
+          <h5>The model rebuilds national origin even when it never sees it.</h5>
+          <p>NIE issuance date, contract type, postal code, remittance pattern — together they reconstruct the protected characteristic that was excluded as an input. Bias survives the deletion.</p>
+        </div>
+        <div class="bias-mini">
+          <div class="bias-mini-num">C · INCOME SHAPE</div>
+          <h5>Entrepreneurial cash flow is misread as instability.</h5>
+          <p>Lumpy revenue from real businesses scores worse than a flat nómina at half the level. Foreign liabilities count against. Foreign assets, unverifiable, do not count in favour.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 4 — COST OF INACTION -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">03</span><span class="dot"></span><span>Cost of inaction</span></div><div class="right">04 / 12</div></div>
+  <div class="slide-eyebrow">Doing nothing is the most expensive option</div>
+  <h2 class="slide-title">Each dimension is modest in isolation. <em>Together, they compound.</em></h2>
+  <p class="slide-lead">The exponential cost is not any single line — it is that all four deteriorate together, and that they reinforce each other on a 36-month horizon.</p>
+  <table class="cost-table">
+    <thead><tr><th style="width:22%">Dimension</th><th style="width:39%">Year 1 exposure</th><th style="width:39%">3-year compounded exposure</th></tr></thead>
+    <tbody>
+      <tr><th>Regulatory</th><td>Conformity-assessment gap on the Aug 2, 2026 deadline.</td><td class="year3">Up to €35M or 7% of global turnover in penalties; AESIA supervisory scrutiny in Spain.</td></tr>
+      <tr><th>Commercial</th><td>Approval gap on the thin-file cohort; revenue foregone.</td><td class="year3">First-mover advantage captured by competitors; permanent loss of the cohort.</td></tr>
+      <tr><th>Reputational</th><td>Isolated customer complaints, social-media exposure.</td><td class="year3">Brand association with discriminatory lending; CAC inflation across segments.</td></tr>
+      <tr><th>Litigation / GDPR</th><td>SCHUFA-style complaints under GDPR Art. 22.</td><td class="year3">Class-style exposure on automated decisions made without meaningful explanations.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SLIDE 5 — THE 4-LAYER FRAMEWORK -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">04</span><span class="dot"></span><span>The framework</span></div><div class="right">05 / 12</div></div>
+  <div class="slide-eyebrow">The intervention, end to end</div>
+  <h2 class="slide-title">Four integrated layers. <em>Every decision explained.</em></h2>
+  <p class="slide-lead">Not a single model — a compliance architecture. A gradient-boosted classifier at the core, wrapped in explainability, constrained by fairness, and governed by humans. Each layer addresses a specific friction.</p>
+  <div class="framework-diagram">
+    <div class="framework-layer">
+      <div class="layer-num">I</div>
+      <div>
+        <div class="layer-name">Data enrichment</div>
+        <div class="layer-desc">PSD2 open banking — cash flow, invoice discipline, remittance stability, utility payments, behavioural signals.</div>
+        <div class="framework-mini-line">Turns "thin file" into a scoreable profile without requiring prior Spanish footprint.</div>
+      </div>
+      <div class="layer-addr">Addresses<br>empty registries</div>
+    </div>
+    <div class="framework-layer">
+      <div class="layer-num">II</div>
+      <div>
+        <div class="layer-name">Explainable modelling engine</div>
+        <div class="layer-desc">Gradient-boosted primary + offline challenger. SHAP + LIME as per-decision supporting mechanisms.</div>
+        <div class="framework-mini-line">Every score arrives with a rationale, not just a number.</div>
+      </div>
+      <div class="layer-addr">Addresses<br>training bias</div>
+    </div>
+    <div class="framework-layer">
+      <div class="layer-num">III</div>
+      <div>
+        <div class="layer-name">Fairness constraints</div>
+        <div class="layer-desc">Demographic parity, equalised odds, equal opportunity, disparate impact. Continuous proxy-leakage scanning.</div>
+        <div class="framework-mini-line">Continuous audit, not a one-off launch check. Rolls back on drift.</div>
+      </div>
+      <div class="layer-addr">Addresses<br>proxy discrimination</div>
+    </div>
+    <div class="framework-layer">
+      <div class="layer-num">IV</div>
+      <div>
+        <div class="layer-name">Human-in-the-loop governance</div>
+        <div class="layer-desc">Borderline cases routed to underwriters with the XAI dashboard. Tamper-evident audit trail. Adverse-action explanations. Appeal route.</div>
+        <div class="framework-mini-line">No customer rejected by a model in isolation.</div>
+      </div>
+      <div class="layer-addr">Addresses<br>AI Act Art. 14</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 6 — HOW IT WORKS IN PRACTICE / AUGMENTED -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">05</span><span class="dot"></span><span>How it works in practice</span></div><div class="right">06 / 12</div></div>
+  <div class="slide-eyebrow">Augmented, not replaced</div>
+  <h2 class="slide-title">Underwriters are <em>upgraded</em>, not removed.</h2>
+  <p class="slide-lead">The strongest test of augmentation: a member of staff who understood their job before the framework should recognise it as a better version of the same job — not as a different job.</p>
+  <div class="augmented-scene">
+    <div class="aug-col before">
+      <div class="aug-label">Before the framework</div>
+      <h4>A black-box score, or a 30-minute file read</h4>
+      <p>Either an opaque decision the underwriter cannot challenge, or a raw application file that takes 20–30 minutes to interpret from scratch.</p>
+      <p>Decision quality depends heavily on individual experience. Cases that should be reviewed get auto-rejected.</p>
+    </div>
+    <div class="aug-arrow">→</div>
+    <div class="aug-col after">
+      <div class="aug-label" style="margin-bottom: 0.7rem; padding-left: 0.2rem;">With the framework — XAI dashboard</div>
+      <div class="dashboard-mock">
+        <div class="dash-header">
+          <span class="dash-app-tag">XAI · Underwriter</span>
+          <span class="dash-app-id">app·esp-2026-0847</span>
+          <span class="dash-app-status">Routed · Review required</span>
+        </div>
+        <div class="dash-applicant">
+          <div class="dash-name">M. K.</div>
+          <div class="dash-meta">34 · self-employed designer · Madrid · 22 mo. with bank</div>
+        </div>
+        <div class="dash-section">
+          <div class="dash-section-label">Risk score</div>
+          <div class="dash-score-row">
+            <div class="dash-score-num">642</div>
+            <div class="dash-score-bar"><div class="dash-score-fill" style="width:75%"></div></div>
+            <div class="dash-score-tag">Review required</div>
+          </div>
+        </div>
+        <div class="dash-section">
+          <div class="dash-section-label">Top contributors · SHAP</div>
+          <div class="dash-shap">
+            <div class="shap-row"><span class="shap-sign pos">+</span><span class="shap-feat">Cash-flow stability (PSD2, 18 mo.)</span><div class="shap-bar"><div class="shap-fill pos" style="width:84%"></div></div></div>
+            <div class="shap-row"><span class="shap-sign pos">+</span><span class="shap-feat">Invoice-payment cadence</span><div class="shap-bar"><div class="shap-fill pos" style="width:71%"></div></div></div>
+            <div class="shap-row"><span class="shap-sign pos">+</span><span class="shap-feat">Utility &amp; rent consistency</span><div class="shap-bar"><div class="shap-fill pos" style="width:58%"></div></div></div>
+            <div class="shap-row"><span class="shap-sign neg">−</span><span class="shap-feat">NIE recency &lt; 36 mo.</span><div class="shap-bar"><div class="shap-fill neg" style="width:42%"></div></div></div>
+            <div class="shap-row"><span class="shap-sign neg">−</span><span class="shap-feat">No CIRBE history</span><div class="shap-bar"><div class="shap-fill neg" style="width:30%"></div></div></div>
+          </div>
+        </div>
+        <div class="dash-row-2">
+          <div class="dash-mini">
+            <div class="dash-mini-label">Fairness · cohort vs ref</div>
+            <div class="dash-mini-val"><span class="ratio-num">0.87</span><span class="ratio-tag pass">within target</span></div>
+          </div>
+          <div class="dash-mini">
+            <div class="dash-mini-label">Audit trail</div>
+            <div class="dash-mini-val mono-val">model v3.2 · 14·04·26 · logged</div>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <button class="dash-btn approve">Approve</button>
+          <button class="dash-btn">Decline</button>
+          <button class="dash-btn escalate">Escalate</button>
+        </div>
+      </div>
+      <div class="dashboard-caption">No customer rejected by a model in isolation. Authority stays human; the inputs get better.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 — ROI + VALUATION IMPACT -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">06</span><span class="dot"></span><span>ROI &amp; valuation</span></div><div class="right">07 / 12</div></div>
+  <div class="slide-eyebrow">What it costs. Why it earns it back.</div>
+  <h2 class="slide-title">A build-heavy Year 1, then steady-state — and four valuation inputs that move <em>simultaneously</em>.</h2>
+  <div class="roi-stack">
+    <div class="roi-top">
+      <div class="roi-num-block">
+        <div class="roi-label">Year 1 — build</div>
+        <div class="roi-num">≈ <em>€2.7M – 3.7M</em></div>
+        <div class="roi-desc">Tech build, MLOps + data pipeline, conformity assessment, training and change management. One-off.</div>
+      </div>
+      <div class="roi-num-block">
+        <div class="roi-label">Years 2–5 — steady state</div>
+        <div class="roi-num">≈ <em>€600K – 950K</em> / yr</div>
+        <div class="roi-desc">Maintenance, retraining, monitoring, ongoing governance. Folded into BAU risk and tech budgets.</div>
+      </div>
+    </div>
+    <div>
+      <div class="val-row-label">Where this shows up in the valuation</div>
+      <div class="val-row">
+        <div class="val-mini"><h6>Revenue growth</h6><div class="val-mini-tag">DCF · numerator</div><p>Approved volume on the thin-file cohort adds incremental revenue. Compounding, not one-off.</p></div>
+        <div class="val-mini"><h6>Operating margin</h6><div class="val-mini-tag">DCF · numerator</div><p>Lower CAC on the cohort and reduced manual-override load. Operating leverage as it scales.</p></div>
+        <div class="val-mini"><h6>Cost of capital</h6><div class="val-mini-tag">DCF · denominator</div><p>Demonstrable AI-Act compliance lowers the regulatory risk premium. WACC falls.</p></div>
+        <div class="val-mini"><h6>Exit / multiple</h6><div class="val-mini-tag">Multiple expansion</div><p>Acquirers pay a premium for compliance-by-design. Underwrites the terminal value.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 — 3 KPIs -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">07</span><span class="dot"></span><span>The three KPIs</span></div><div class="right">08 / 12</div></div>
+  <div class="slide-eyebrow">The three numbers the business is judged on</div>
+  <h2 class="slide-title">Three KPIs. <em>No others.</em></h2>
+  <p class="slide-lead">The framework stands or falls on these three. Reported monthly to the risk committee, quarterly to the board. No fourth vanity metric gets added to make the picture nicer.</p>
+  <div class="kpi-triangle">
+    <div class="kpi-card">
+      <div class="kpi-num">I</div>
+      <div class="kpi-name">Demographic parity ratio</div>
+      <div class="kpi-def">Approval rate on the target cohort divided by approval rate on the reference book, after controlling for observable risk. The ethics KPI that is also a commercial KPI.</div>
+      <div class="kpi-target"><div class="kpi-target-label">12-month target</div><div class="kpi-target-val">Ratio ≥ 0.85 over rolling 90-day windows — above the widely used four-fifths disparate-impact benchmark.</div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">II</div>
+      <div class="kpi-name">Customer acquisition cost</div>
+      <div class="kpi-def">CAC on the underserved cohort vs. the general book. The framework should materially reduce CAC on the cohort by unlocking inbound demand and lowering rejection-driven churn.</div>
+      <div class="kpi-target"><div class="kpi-target-label">12-month target</div><div class="kpi-target-val">CAC on the cohort converges on the general-book baseline.</div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-num">III</div>
+      <div class="kpi-name">Loss-adjusted NIM</div>
+      <div class="kpi-def">Net interest margin on the cohort, after impairment. The commercial test. An approval-rate lift that degrades loss-adjusted NIM is not a win — it is subsidised volume.</div>
+      <div class="kpi-target"><div class="kpi-target-label">12-month target</div><div class="kpi-target-val">Held flat or better on the cohort vs. pre-framework baseline.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 9 — ETHICS + REGULATION + HUMAN FACTOR -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">08</span><span class="dot"></span><span>Ethics, regulation, human factor</span></div><div class="right">09 / 12</div></div>
+  <div class="slide-eyebrow">One synthesis: compliance, ethics, geography</div>
+  <h2 class="slide-title">Compliance is built in. Ethics is <em>resolved in the architecture</em>. Spain is the right jurisdiction.</h2>
+  <div class="ethics-3col">
+    <div class="ethics-col">
+      <div class="ethics-col-label">EU AI Act · high-risk obligations</div>
+      <h4>Every article, answered.</h4>
+      <div class="ethics-row"><span class="er-tag">Art. 9</span><span class="er-text"><strong>Risk management</strong> — bias &amp; fairness audits as continuous process.</span></div>
+      <div class="ethics-row"><span class="er-tag">Art. 10</span><span class="er-text"><strong>Data governance</strong> — PSD2 enrichment, proxy-leakage detection, lineage.</span></div>
+      <div class="ethics-row"><span class="er-tag">Art. 13</span><span class="er-text"><strong>Transparency</strong> — model fact sheet, plain-language adverse-action statements.</span></div>
+      <div class="ethics-row"><span class="er-tag">Art. 14</span><span class="er-text"><strong>Human oversight</strong> — Layer 4: routing, dashboard, appeal route, revocable authority.</span></div>
+      <div class="ethics-row"><span class="er-tag">Art. 15</span><span class="er-text"><strong>Accuracy &amp; robustness</strong> — champion-challenger, drift monitoring, rollback.</span></div>
+      <div class="ethics-row"><span class="er-tag">Art. 26-27</span><span class="er-text"><strong>Deployer duties</strong> — FRIA completed; AESIA-aligned incident channel.</span></div>
+    </div>
+    <div class="ethics-col">
+      <div class="ethics-col-label">The human factor · three tensions</div>
+      <h4>Resolved in the design.</h4>
+      <div class="ethics-row"><span class="er-tag">Privacy</span><span class="er-text"><strong>vs. accuracy.</strong> Enriched data only under explicit PSD2 consent, with withdrawal path. The applicant controls the data used to score them.</span></div>
+      <div class="ethics-row"><span class="er-tag">Bias</span><span class="er-text"><strong>vs. performance.</strong> Conscious trade — small accuracy cost for legal, ethical, reputational gain. Cost closes as better data enters.</span></div>
+      <div class="ethics-row"><span class="er-tag">Workforce</span><span class="er-text"><strong>vs. automation.</strong> Underwriters keep authority. Time shifts from raw file-reading to structured judgment on borderline cases.</span></div>
+    </div>
+    <div class="ethics-col">
+      <div class="ethics-col-label">Tech-Spain · the geography edge</div>
+      <h4>Built to Spain's standard. Ready for the EU's.</h4>
+      <p class="ethics-prose"><strong>AESIA</strong> — the Agencia Española de Supervisión de Inteligencia Artificial — is the <strong>EU's first national AI supervisory authority</strong>.</p>
+      <p class="ethics-prose" style="margin-top: 0.8rem;">Conformity assessment, CE marking, and EU high-risk AI database registration run through the EU process. <strong>AESIA supervises deployers in-country</strong>, and is where Spanish institutions evidence operational compliance.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 10 — ROADMAP + ROADBLOCK -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">09</span><span class="dot"></span><span>Execution &amp; the principal roadblock</span></div><div class="right">10 / 12</div></div>
+  <div class="slide-eyebrow">12-month rollout · cultural mitigation</div>
+  <h2 class="slide-title">Twelve months, three exits. The hard part is <em>cultural</em>, not technical.</h2>
+  <div class="exec-stack">
+    <div class="roadmap-mini">
+      <div class="phase-mini">
+        <div class="pm-label">Phase One</div>
+        <div class="pm-name">Pilot</div>
+        <div class="pm-months">Months 1–4</div>
+        <p class="pm-scope">Layers 1 &amp; 2 in shadow-mode on a ring-fenced segment. Outputs logged, not used in live decisions. Fairness audit and proxy-leakage scans run side-by-side with the legacy model. Conformity-assessment workstream initiated; technical documentation begun in parallel. <strong style="color: var(--fg); font-weight: 500; display: block; margin-top: 0.5rem;">Exit:</strong> stable fairness metrics; no material proxy leakage.</p>
+      </div>
+      <div class="phase-mini">
+        <div class="pm-label">Phase Two</div>
+        <div class="pm-name">Scale</div>
+        <div class="pm-months">Months 5–8</div>
+        <p class="pm-scope">Live on a defined lending segment with legacy fallback. Layer 3 fairness constraints active. Layer 4 governance and appeal route operational. First conformity-assessment draft delivered to external auditor. Risk committee retains authority to revert at any point. <strong style="color: var(--fg); font-weight: 500; display: block; margin-top: 0.5rem;">Exit:</strong> loss-adjusted NIM flat or better vs. baseline.</p>
+      </div>
+      <div class="phase-mini">
+        <div class="pm-label">Phase Three</div>
+        <div class="pm-name">Sign-off &amp; expansion</div>
+        <div class="pm-months">Months 9–12</div>
+        <p class="pm-scope">Phased rollout to additional lending segments toward bank-wide coverage. Conformity assessment completed and signed off; CE marking applied; EU high-risk AI database registration filed. Monthly fairness reporting institutionalised. <strong style="color: var(--fg); font-weight: 500; display: block; margin-top: 0.5rem;">Exit:</strong> conformity sign-off and EU registration completed ahead of Aug 2, 2026.</p>
+      </div>
+    </div>
+    <div class="roadblock-row">
+      <div>
+        <div class="rb-label">The principal roadblock</div>
+        <div class="rb-headline"><span class="strike">Technology.</span> <em>Cultural resistance.</em></div>
+        <p class="rb-desc">Risk functions trained on traditional scoring stall quietly at exit criteria, not openly. Mitigations are engineered into the phase design, not bolted on after.</p>
+      </div>
+      <div class="mit-row">
+        <div class="mit-mini"><strong>Risk-committee sponsorship from day zero.</strong><span>The committee owns the exit criteria, not the technology team.</span></div>
+        <div class="mit-mini"><strong>Continuous comparative evidence.</strong><span>Resistance has to be argued against the bank's own data, not against ideology.</span></div>
+        <div class="mit-mini"><strong>Underwriter co-design, not notification.</strong><span>The dashboard is built with the people closest to rejection — not handed to them.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 11 — MARKETING / TRUST: THE CLARITY CORRIDOR -->
+<section class="slide">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">10</span><span class="dot"></span><span>Marketing &amp; trust</span></div><div class="right">11 / 12</div></div>
+  <div class="slide-eyebrow">The trust rebuild — radical transparency</div>
+  <h2 class="slide-title">"<em>The Clarity Corridor</em>" — every decision, explained, on the record.</h2>
+  <p class="slide-lead">A fairer credit framework is only half the work. The other half is communicating it. The Clarity Corridor turns the framework's transparency from a back-office property into a public-facing brand asset — to the cohort, to the market, and to the regulator.</p>
+  <div class="campaign-grid">
+    <div class="tactic-col">
+      <div class="tactic-num">I</div>
+      <div class="tactic-tag">The personal touch</div>
+      <h4>The "Why" Receipt</h4>
+      <p>Every applicant — approved, declined, or escalated — receives a personalised, plain-language explanation of the decision and the data that drove it. The reasoning is no longer opaque, even to the rejected. Doubles as our GDPR Art. 22 and CCD 2023/2225 answer.</p>
+    </div>
+    <div class="tactic-col">
+      <div class="tactic-num">II</div>
+      <div class="tactic-tag">The cohort, in their own words</div>
+      <h4>Founder Stories</h4>
+      <p>A video series featuring entrepreneurs the legacy system would have rejected and the framework approved — Madrid-grounded, with founders whose origins span emerging markets. Owned distribution and earned media. Builds the proof the regulator and the market both want to see.</p>
+    </div>
+    <div class="tactic-col">
+      <div class="tactic-num">III</div>
+      <div class="tactic-tag">The receipt for the institution</div>
+      <h4>The Ethics Ledger</h4>
+      <p>A quarterly public report — demographic parity ratio, drift incidents, model versions in production, fairness-audit outcomes — independently audited by a third-party ethics firm. Turns a reporting obligation into a competitive signal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12 — THESIS -->
+<section class="slide thesis">
+  <div class="slide-meta"><div class="left"><span class="pillar-tag">Closing</span><span class="dot"></span><span>The thesis</span></div><div class="right">12 / 12</div></div>
+  <div class="thesis-body" style="margin: auto 0;">
+    <div class="thesis-pre">The thesis, distilled</div>
+    <h2 class="thesis-quote">The solution is not <span class="strike">"be nicer to emerging-market entrepreneurs."</span><br><br>The solution is <em>"stop confusing unfamiliar data with bad risk."</em></h2>
+    <div class="thesis-attribution">Fairer lending and better credit-risk measurement are the same technical problem — solved by the same four-layer framework. The neo-bank that builds it first gains a structural competitive advantage that compounds through every quarter it runs.</div>
+  </div>
+</section>
+
+</div>
+
+<div class="bottom-nav"><div class="progress-bar" id="progressBar"></div></div>
+<div class="slide-counter" id="slideCounter">01 / 12</div>
+<div class="hint"><span>Navigate</span><kbd>←</kbd><kbd>→</kbd><span>·</span><kbd>Esc</kbd><span>Overview</span></div>
+
+<div class="overview-mode" id="overviewMode">
+  <h2>All slides</h2>
+  <div class="overview-grid" id="overviewGrid"></div>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const progressBar = document.getElementById('progressBar');
+  const slideCounter = document.getElementById('slideCounter');
+  const overviewMode = document.getElementById('overviewMode');
+  const overviewGrid = document.getElementById('overviewGrid');
+  let current = 0;
+
+  slides.forEach((slide, i) => {
+    const titleEl = slide.querySelector('.slide-title, .divider-title, h1, h2');
+    let title = '';
+    if (titleEl) {
+      title = titleEl.textContent.trim().replace(/\s+/g, ' ');
+      if (title.length > 60) title = title.slice(0, 57) + '...';
+    } else {
+      title = 'Slide ' + (i + 1);
+    }
+    const thumb = document.createElement('div');
+    thumb.className = 'overview-thumb';
+    thumb.innerHTML = '<div class="thumb-num">' + String(i + 1).padStart(2, '0') + ' / ' + total + '</div><div class="thumb-title">' + title + '</div>';
+    thumb.addEventListener('click', () => { goTo(i); toggleOverview(false); });
+    overviewGrid.appendChild(thumb);
+  });
+
+  function goTo(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    updateUI();
+    history.replaceState(null, '', '#' + (current + 1));
+  }
+
+  function updateUI() {
+    const pct = total > 1 ? (current / (total - 1)) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    slideCounter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    if (slides[current].classList.contains('thesis')) {
+      slideCounter.style.background = '#1A1611';
+      slideCounter.style.color = '#D4CBB8';
+      slideCounter.style.borderColor = '#3A3228';
+    } else {
+      slideCounter.style.background = '';
+      slideCounter.style.color = '';
+      slideCounter.style.borderColor = '';
+    }
+  }
+
+  function toggleOverview(force) {
+    const shouldShow = force !== undefined ? force : !overviewMode.classList.contains('active');
+    if (shouldShow) overviewMode.classList.add('active');
+    else overviewMode.classList.remove('active');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); if (overviewMode.classList.contains('active')) toggleOverview(false); else goTo(current + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); if (overviewMode.classList.contains('active')) toggleOverview(false); else goTo(current - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+    else if (e.key === 'Escape') { e.preventDefault(); toggleOverview(); }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (overviewMode.classList.contains('active')) return;
+    if (e.target.closest('a, button, .overview-thumb, kbd')) return;
+    const x = e.clientX;
+    const w = window.innerWidth;
+    if (x < w * 0.25) goTo(current - 1);
+    else if (x > w * 0.75) goTo(current + 1);
+  });
+
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) { if (dx < 0) goTo(current + 1); else goTo(current - 1); }
+  }, { passive: true });
+
+  const hash = parseInt(window.location.hash.replace('#', ''), 10);
+  if (!isNaN(hash) && hash > 0 && hash <= total) goTo(hash - 1);
+  else updateUI();
+})();
+</script>
+
+</body>
+</html>
